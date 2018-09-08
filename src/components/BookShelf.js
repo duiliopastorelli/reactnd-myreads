@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import BookItem from './BookItem';
 import LazyLoad from 'react-lazyload';
-import Library from "./Library";
 
 //TODO: handle empty shelf
+//TODO: force lazyload to refire if a shelf becomes empty
 
 /**
  * This Component has the responsibility of handle the single shelf.
@@ -13,7 +13,7 @@ import Library from "./Library";
 class BookShelf extends Component {
 
   render (){
-    const {shelfName, books} = this.props;
+    const {shelfName, books, handleBookPosition} = this.props;
 
     return (
       <div className="bookshelf">
@@ -23,8 +23,11 @@ class BookShelf extends Component {
 
             {/* Loop through all the available books in this shelf */}
             {books.map(book => (
-              <LazyLoad height={400} offset={100}>
-                <BookItem key={book.id} bookDetails={book} />
+              <LazyLoad key={book.id} height={400} offset={100}>
+                <BookItem
+                  bookDetails={book}
+                  handleBookPosition={handleBookPosition}
+                />
               </LazyLoad>
             ))}
 
