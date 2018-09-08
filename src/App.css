@@ -8,6 +8,9 @@ body, .app {
   background: white;
 }
 
+select {
+  font-size: 12px;
+}
 /* main page */
 
 .list-books-title {

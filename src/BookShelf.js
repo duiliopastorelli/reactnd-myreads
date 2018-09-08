@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import BookItem from './BookItem';
+import LazyLoad from 'react-lazyload';
+import Library from "./Library";
 
 //TODO: handle empty shelf
 
@@ -21,7 +23,9 @@ class BookShelf extends Component {
 
             {/* Loop through all the available books in this shelf */}
             {books.map(book => (
-              <BookItem key={book.id} bookDetails={book} />
+              <LazyLoad height={400} offset={100}>
+                <BookItem key={book.id} bookDetails={book} />
+              </LazyLoad>
             ))}
 
           </ol>
