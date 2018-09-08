@@ -88,6 +88,7 @@ class Library extends Component {
               },
               //Handle the rejected promise
               reason => {
+              //TODO: revert UI if the promise fail and notify the user
                 console.warn(`Promise rejected: ${reason}`)
               });
         }
