@@ -4,7 +4,7 @@ import BookActions from './BookActions'
 class BookItem extends Component {
 
   render() {
-    const {bookDetails, handleBookPosition} = this.props;
+    const {books, bookDetails, updateBooks} = this.props;
 
     return (
       <li>
@@ -18,9 +18,10 @@ class BookItem extends Component {
 
             {/* Component for handle the book actions */}
             <BookActions
+              books={books}
               shelf={bookDetails.shelf}
               bookId={bookDetails.id}
-              handleBookPosition={handleBookPosition}
+              updateBooks={updateBooks}
             />
 
           </div>

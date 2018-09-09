@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {update} from "../BooksAPI";
 
 class BookActions extends Component {
 
@@ -15,8 +16,34 @@ class BookActions extends Component {
    * @param event
    */
   handleChange = (event) => {
+
+    //Iterate through all the books for find the one to change
+    const actualBooks = this.props.books;
+
+    actualBooks.forEach(book => {
+
+      //Find where the book that changed status is positioned
+      if (book.id === this.props.bookId) {
+
+        //Assign the new shelf to the current book
+        book.shelf = event.target.value;
+
+        //Update the BE
+        update(book, event.target.value)
+          .then(res => {
+              //TODO: add a UI message for letting the user know that the process went well
+            },
+            //Handle the rejected promise
+            reason => {
+              console.warn(`Promise rejected: ${reason}`)
+            });
+      }
+
+      return book;
+    });
+
     //Change the status of the UI forcing a re-rendering
-    this.props.handleBookPosition(this.props.bookId, event.target.value);
+    this.props.updateBooks(actualBooks);
   };
 
   render() {

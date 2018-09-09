@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import BookItem from './BookItem';
 import LazyLoad from 'react-lazyload';
 
@@ -12,21 +12,52 @@ import LazyLoad from 'react-lazyload';
  */
 class BookShelf extends Component {
 
-  render (){
-    const {shelfName, books, handleBookPosition} = this.props;
+  state = {
+    shelf: [],
+  };
+
+  //Creates a shelf based on the books available and the specific shelf name
+  createShelf = (books, shelfName) => {
+    this.setState(() => ({
+      shelf: books.filter(book => book.shelf === shelfName),
+    }))
+  };
+
+  componentDidUpdate(prevProps) {
+    //Handle the 1st rendering of the shelf after the API fetch
+    if (this.props.books !== prevProps.books) {
+      console.log('did update');
+      //Create a new shelf if the books have changed
+      this.createShelf(this.props.books, this.props.shelfName)
+    }
+  }
+
+  shouldComponentUpdate(prevProps) {
+    //Re-render the shelf if the user changed a book value
+    if (prevProps !== this.props) {
+      //Create a new shelf if the books have changed
+      this.createShelf(this.props.books, this.props.shelfName);
+    }
+
+    return true;
+  }
+
+  render() {
+    const {books, shelfLabel, updateBooks} = this.props;
 
     return (
       <div className="bookshelf">
-        <h2 className="bookshelf-title">{shelfName}</h2>
+        <h2 className="bookshelf-title">{shelfLabel}</h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
 
             {/* Loop through all the available books in this shelf */}
-            {books.map(book => (
+            {this.state.shelf.map(book => (
               <LazyLoad key={book.id} height={400} offset={100}>
                 <BookItem
+                  books={books}
                   bookDetails={book}
-                  handleBookPosition={handleBookPosition}
+                  updateBooks={updateBooks}
                 />
               </LazyLoad>
             ))}
