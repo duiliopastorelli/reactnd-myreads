@@ -110,7 +110,7 @@ class SearchBar extends Component {
                   updatePersonalBooks={updatePersonalBooks}
                 />
               }
-              return null
+              return null;
             })}
           </ol>
         </div>
