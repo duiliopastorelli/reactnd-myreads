@@ -26,18 +26,21 @@ class Library extends Component {
   };
 
   render() {
-    const {personalBooks, updatePersonalBooks} = this.props;
+    const {personalBooks, updatePersonalBooks, createNotification} = this.props;
 
     return (
       <div className="list-books-content">
         <div>
           {this.state.shelves.map(shelf => {
             return <BookShelf key={shelf.name}
-              shelfLabel={shelf.label}
-              shelfName={shelf.name}
-              personalBooks={personalBooks}
-              booksToDisplay={personalBooks.filter(book => book.shelf === shelf.name)}
-              updatePersonalBooks={updatePersonalBooks}
+                              shelfLabel={shelf.label}
+                              shelfName={shelf.name}
+                              personalBooks={personalBooks}
+                              booksToDisplay={personalBooks.filter(
+                                book => book.shelf === shelf.name
+                              )}
+                              updatePersonalBooks={updatePersonalBooks}
+                              createNotification={createNotification}
             />
           })}
         </div>

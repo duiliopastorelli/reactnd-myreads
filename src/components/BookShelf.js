@@ -16,7 +16,8 @@ class BookShelf extends Component {
       personalBooks,
       booksToDisplay,
       shelfLabel,
-      updatePersonalBooks
+      updatePersonalBooks,
+      createNotification
     } = this.props;
 
     return (
@@ -32,6 +33,7 @@ class BookShelf extends Component {
                   personalBooks={personalBooks}
                   bookDetails={book}
                   updatePersonalBooks={updatePersonalBooks}
+                  createNotification={createNotification}
                 />
               </LazyLoad>
             ))}

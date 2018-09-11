@@ -7,13 +7,22 @@ class BookItem extends Component {
     const {
       personalBooks,
       bookDetails,
-      updatePersonalBooks
+      updatePersonalBooks,
+      createNotification
     } = this.props;
 
     //Handle missing thumbnail using a grey background as fallback
     let bookImage = '';
     if (bookDetails.imageLinks) {
       bookImage = bookDetails.imageLinks.smallThumbnail || '';
+    }
+
+    //Handle the missing author
+    let author = <div className="book-authors">Unknow</div>;
+    if (bookDetails.authors) {
+      author = bookDetails.authors.map(author => {
+        return <div key={author} className="book-authors">{author}</div>;
+      })
     }
 
     return (
@@ -31,14 +40,12 @@ class BookItem extends Component {
               personalBooks={personalBooks}
               bookDetails={bookDetails}
               updatePersonalBooks={updatePersonalBooks}
+              createNotification={createNotification}
             />
 
           </div>
           <div className="book-title">{bookDetails.title}</div>
-          {bookDetails.authors && bookDetails.authors.map(author => {
-            return <div key={author}
-                        className="book-authors">{author || 'Unknow'}</div>;
-          })}
+          {author}
         </div>
       </li>
     )

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {update} from "../BooksAPI";
-import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
 class BookActions extends Component {
@@ -21,19 +20,38 @@ class BookActions extends Component {
     currentBook.shelf = event.target.value;
 
     //Update the object for populate the UI
-    actualBooks.find(book => book.id === this.props.bookDetails.id) ||
-    actualBooks.push(currentBook);
+    //Search for the current book in the personal library
+    let isBookAlreadyInLibrary = false;
+    actualBooks.map(book => {
+      if(book.id === currentBook.id) {
+        isBookAlreadyInLibrary = true;
+        book.shelf = currentBook.shelf;
+      }
+    });
+
+    //If the map above didn't change the array, it means that the book needs to
+    //be added to the personal library
+    isBookAlreadyInLibrary || actualBooks.push(currentBook);
 
     //Update the BE
     update(currentBook, event.target.value)
       .then(() => {
-          NotificationManager.info(`The remote library has been successfully
-               updated.`, currentBook.title, 2000);
+          this.props.createNotification(
+            'info',
+            `The remote library has been successfully updated.`,
+            currentBook.title,
+            2000
+          );
         },
         //Handle the rejected promise
         reason => {
-          NotificationManager.error(`The remote library has NOT been successfully
-               updated. The error was: ${reason}`, `Failed!`);
+          this.props.createNotification(
+            'error',
+            `The remote library has NOT been successfully updated. The error 
+            was: ${reason}`,
+            `Failed!`,
+            10000
+          );
         });
 
     //Change the status of the UI forcing a re-rendering
@@ -54,8 +72,6 @@ class BookActions extends Component {
           <option value="read">Read</option>
           <option value="none">None</option>
         </select>
-
-        <NotificationContainer/>
       </div>
     )
   }
