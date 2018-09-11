@@ -4,7 +4,17 @@ import BookActions from './BookActions'
 class BookItem extends Component {
 
   render() {
-    const {bookDetails, handleBookPosition} = this.props;
+    const {
+      personalBooks,
+      bookDetails,
+      updatePersonalBooks
+    } = this.props;
+
+    //Handle missing thumbnail using a grey background as fallback
+    let bookImage = '';
+    if (bookDetails.imageLinks) {
+      bookImage = bookDetails.imageLinks.smallThumbnail || '';
+    }
 
     return (
       <li>
@@ -13,20 +23,21 @@ class BookItem extends Component {
             <div className="book-cover" style={{
               width: 128,
               height: 193,
-              backgroundImage: `url("${bookDetails.imageLinks.smallThumbnail}")`,
+              backgroundImage: `url("${bookImage}")`,
             }}></div>
 
             {/* Component for handle the book actions */}
             <BookActions
-              shelf={bookDetails.shelf}
-              bookId={bookDetails.id}
-              handleBookPosition={handleBookPosition}
+              personalBooks={personalBooks}
+              bookDetails={bookDetails}
+              updatePersonalBooks={updatePersonalBooks}
             />
 
           </div>
           <div className="book-title">{bookDetails.title}</div>
-          {bookDetails.authors.map(author => {
-            return <div key={author} className="book-authors">{author}</div>;
+          {bookDetails.authors && bookDetails.authors.map(author => {
+            return <div key={author}
+                        className="book-authors">{author || 'Unknow'}</div>;
           })}
         </div>
       </li>
