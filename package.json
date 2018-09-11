@@ -5,6 +5,7 @@
     "react-debounce-input": "^3.2.0",
     "react-dom": "^16.3.2",
     "react-lazyload": "^2.3.0",
+    "react-notifications": "^1.4.3",
     "react-router-dom": "^4.3.1"
   },
   "devDependencies": {

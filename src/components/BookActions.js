@@ -1,12 +1,9 @@
 import React, {Component} from 'react';
 import {update} from "../BooksAPI";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 class BookActions extends Component {
-
-  state = {
-    shelfValue: this.props.shelf,
-    handleBookPosition: this.props.handleBookPosition,
-  };
 
   /**
    * Invokes a function that reside in the parent component (Library) that
@@ -17,40 +14,37 @@ class BookActions extends Component {
    */
   handleChange = (event) => {
 
-    //Iterate through all the books for find the one to change
-    const actualBooks = this.props.books;
+    const actualBooks = this.props.personalBooks;
+    const currentBook = this.props.bookDetails;
 
-    actualBooks.forEach(book => {
+    //Assign the new shelf to the current book
+    currentBook.shelf = event.target.value;
 
-      //Find where the book that changed status is positioned
-      if (book.id === this.props.bookId) {
+    //Update the object for populate the UI
+    actualBooks.find(book => book.id === this.props.bookDetails.id) ||
+    actualBooks.push(currentBook);
 
-        //Assign the new shelf to the current book
-        book.shelf = event.target.value;
-
-        //Update the BE
-        update(book, event.target.value)
-          .then(res => {
-              //TODO: add a UI message for letting the user know that the process went well
-            },
-            //Handle the rejected promise
-            reason => {
-              console.warn(`Promise rejected: ${reason}`)
-            });
-      }
-
-      return book;
-    });
+    //Update the BE
+    update(currentBook, event.target.value)
+      .then(() => {
+          NotificationManager.info(`The remote library has been successfully
+               updated.`, currentBook.title, 2000);
+        },
+        //Handle the rejected promise
+        reason => {
+          NotificationManager.error(`The remote library has NOT been successfully
+               updated. The error was: ${reason}`, `Failed!`);
+        });
 
     //Change the status of the UI forcing a re-rendering
-    this.props.updateBooks(actualBooks);
+    this.props.updatePersonalBooks(actualBooks);
   };
 
   render() {
     return (
       <div className="book-shelf-changer">
         <select
-          defaultValue={this.state.shelfValue}
+          defaultValue={this.props.bookDetails.shelf || 'none'}
           onChange={(e) => this.handleChange(e)}
         >
           <option value="move" disabled>Move to...</option>
@@ -60,6 +54,8 @@ class BookActions extends Component {
           <option value="read">Read</option>
           <option value="none">None</option>
         </select>
+
+        <NotificationContainer/>
       </div>
     )
   }
