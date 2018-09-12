@@ -12,20 +12,6 @@ class BookItem extends Component {
       createNotification
     } = this.props;
 
-    //Handle missing thumbnail using a grey background as fallback
-    let bookImage = '';
-    if (bookDetails.imageLinks) {
-      bookImage = bookDetails.imageLinks.smallThumbnail || '';
-    }
-
-    //Handle the missing author
-    let author = <div className="book-authors">Unknown</div>;
-    if (bookDetails.authors) {
-      author = bookDetails.authors.map(author => {
-        return <div key={author} className="book-authors">{author}</div>;
-      })
-    }
-
     return (
       <li>
         <div className="book">
@@ -33,7 +19,9 @@ class BookItem extends Component {
             <div className="book-cover" style={{
               width: 128,
               height: 193,
-              backgroundImage: `url("${bookImage}")`,
+              backgroundImage: `url("${
+                bookDetails.imageLinks ? bookDetails.imageLinks.smallThumbnail : ''
+              }")`,
             }}></div>
 
             {/* Component for handle the book actions */}
@@ -47,7 +35,10 @@ class BookItem extends Component {
           </div>
 
           <div className="book-title">{bookDetails.title}</div>
-          {author}
+          <div className="book-authors">{
+            bookDetails.authors ?
+              bookDetails.authors.map(author=>author) : 'Unknown'
+          }</div>
         </div>
       </li>
     )
