@@ -14,11 +14,25 @@ class BookShelf extends Component {
     shelfMessage: 'Loading...'
   };
 
+  componentDidMount() {
+    this.updateShelfMessage();
+  }
+
   componentDidUpdate(prevProps) {
-    if(this.props.booksToDisplay !== prevProps.booksToDisplay) {
-      if(this.props.booksToDisplay.length === 0){
+    if (this.props.booksToDisplay !== prevProps.booksToDisplay) {
+      this.updateShelfMessage();
+    }
+  }
+
+  updateShelfMessage = () => {
+    //Check if the UI is still awaiting the end of the books fetch promise
+    if (this.props.personalBooks.length !== 0) {
+      //Display the proper message
+      if (
+        this.props.booksToDisplay.length === 0
+      ) {
         this.setState(() => ({
-          shelfMessage: 'This shelf is looking like my cookies jar, sadly empty! :(',
+          shelfMessage: 'This shelf looks like my cookies jar, sadly empty! :(',
         }))
       } else {
         this.setState(() => ({
@@ -26,7 +40,7 @@ class BookShelf extends Component {
         }))
       }
     }
-  }
+  };
 
   render() {
     const {
