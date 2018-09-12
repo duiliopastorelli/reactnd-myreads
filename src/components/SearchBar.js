@@ -1,25 +1,34 @@
-import React, {Component} from 'react'
-import {Link} from 'react-router-dom'
-import DebounceInput from 'react-debounce-input'
-import {search} from '../BooksAPI'
-import 'react-notifications/lib/notifications.css'
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import {Link} from 'react-router-dom';
+import DebounceInput from 'react-debounce-input';
+import {search} from '../BooksAPI';
+import 'react-notifications/lib/notifications.css';
 import BookItem from "./BookItem";
 
+/**
+ * This Component handle the search view UI
+ * See propTypes at the bottom for more info on props needed
+ *
+ */
 class SearchBar extends Component {
 
   state = {
     searchResult: [],
   };
 
+  //This function handle the changes in the input field and performs the query
+  //to the BE API
   handleInput = (e) => {
     const query = e.target.value;
 
+    //Check if the query is at least not empty
     if (query !== '') {
+      //Perform a search using BooksAPI.js
       search(query)
         .then(res => {
           //Handle the error responses from the API
           if (res.error === 'empty query') {
-
             //Handle the common "no match" error response
             this.props.createNotification(
               'warning',
@@ -28,7 +37,8 @@ class SearchBar extends Component {
               3000
             );
 
-            //Clear the results
+            // Clear the results, just in case another search has been
+            // performed before
             this.setState({searchResult: []});
 
           } else if (res.error) {
@@ -42,12 +52,13 @@ class SearchBar extends Component {
             );
           } else {
 
-            //Filter the results for omit the ones that are already in the
-            //personal library
+            //Assign the shelf value consistently with the personal library
             res.map(result => {
+              //Checks if the book is present in the personal Library
               let match = this.props.personalBooks.find(
                 personalBook => personalBook.id === result.id);
 
+              //Assign the proper shelf value
               match ? result.shelf = match.shelf : result.shelf = 'none';
               return result;
             });
@@ -91,11 +102,6 @@ class SearchBar extends Component {
       '',
       2000
     );
-
-    //Check if the personal Library is populated, if not fetch the books
-    if (this.props.personalBooks.length === 0) {
-      this.props.fetchPersonalLibrary();
-    }
   };
 
   render() {
@@ -125,6 +131,7 @@ class SearchBar extends Component {
 
           </div>
         </div>
+
         <div className="search-books-results">
           <ol className="books-grid">
             {this.state.searchResult.map(book => {
@@ -135,7 +142,6 @@ class SearchBar extends Component {
                 updatePersonalBooks={updatePersonalBooks}
                 createNotification={createNotification}
               />
-              return null;
             })}
           </ol>
         </div>
@@ -143,5 +149,11 @@ class SearchBar extends Component {
     )
   }
 }
+
+SearchBar.propTypes = {
+  personalBooks: PropTypes.array.isRequired, //The personal library
+  updatePersonalBooks: PropTypes.func.isRequired, //UI update
+  createNotification: PropTypes.func.isRequired, //Notification system
+};
 
 export default SearchBar;

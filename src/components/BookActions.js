@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {update} from "../BooksAPI";
 import 'react-notifications/lib/notifications.css';
 
 class BookActions extends Component {
 
   /**
-   * Invokes a function that reside in the parent component (Library) that
+   * Invokes a function that resides in the parent component (Library) that
    * updates both the UI and the BE
    * 'event' is the event emitted on the onChange from the select element
    *
@@ -23,10 +24,11 @@ class BookActions extends Component {
     //Search for the current book in the personal library
     let isBookAlreadyInLibrary = false;
     actualBooks.map(book => {
-      if(book.id === currentBook.id) {
+      if (book.id === currentBook.id) {
         isBookAlreadyInLibrary = true;
         book.shelf = currentBook.shelf;
       }
+      return book;
     });
 
     //If the map above didn't change the array, it means that the book needs to
@@ -40,7 +42,7 @@ class BookActions extends Component {
             'info',
             `The remote library has been successfully updated.`,
             currentBook.title,
-            2000
+            4000
           );
         },
         //Handle the rejected promise
@@ -76,5 +78,12 @@ class BookActions extends Component {
     )
   }
 }
+
+BookActions.propTypes = {
+  personalBooks: PropTypes.array, //The personal library
+  bookDetails: PropTypes.object.isRequired, //Book details
+  updatePersonalBooks: PropTypes.func.isRequired, //UI update
+  createNotification: PropTypes.func.isRequired, //Notification system
+};
 
 export default BookActions;

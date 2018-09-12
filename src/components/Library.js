@@ -1,11 +1,7 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import BookShelf from './BookShelf';
 
-/**
- * This Component has the responsibility of fetch and store all the books
- * information. If they change (as a result of user interaction), this is the
- * place where they get updated.
- */
 class Library extends Component {
 
   state = {
@@ -48,5 +44,11 @@ class Library extends Component {
     )
   }
 }
+
+Library.propTypes = {
+  personalBooks: PropTypes.array, //The personal library
+  updatePersonalBooks: PropTypes.func.isRequired, //UI update
+  createNotification: PropTypes.func.isRequired, //Notification system
+};
 
 export default Library;

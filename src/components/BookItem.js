@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import BookActions from './BookActions'
+import PropTypes from 'prop-types';
+import BookActions from './BookActions';
 
 class BookItem extends Component {
 
@@ -18,7 +19,7 @@ class BookItem extends Component {
     }
 
     //Handle the missing author
-    let author = <div className="book-authors">Unknow</div>;
+    let author = <div className="book-authors">Unknown</div>;
     if (bookDetails.authors) {
       author = bookDetails.authors.map(author => {
         return <div key={author} className="book-authors">{author}</div>;
@@ -44,6 +45,7 @@ class BookItem extends Component {
             />
 
           </div>
+
           <div className="book-title">{bookDetails.title}</div>
           {author}
         </div>
@@ -51,5 +53,12 @@ class BookItem extends Component {
     )
   };
 }
+
+BookItem.propTypes = {
+  personalBooks: PropTypes.array, //The personal library
+  bookDetails: PropTypes.object.isRequired, //Book details
+  updatePersonalBooks: PropTypes.func.isRequired, //UI update
+  createNotification: PropTypes.func.isRequired, //Notification system
+};
 
 export default BookItem;

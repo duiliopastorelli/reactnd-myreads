@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import BookItem from './BookItem';
 import LazyLoad from 'react-lazyload';
-
-//TODO: handle empty shelf
 
 /**
  * This Component has the responsibility of handle the single shelf.
@@ -10,6 +9,24 @@ import LazyLoad from 'react-lazyload';
  * (Library).
  */
 class BookShelf extends Component {
+
+  state = {
+    shelfMessage: 'Loading...'
+  };
+
+  componentDidUpdate(prevProps) {
+    if(this.props.booksToDisplay !== prevProps.booksToDisplay) {
+      if(this.props.booksToDisplay.length === 0){
+        this.setState(() => ({
+          shelfMessage: 'This shelf is looking like my cookies jar, sadly empty! :(',
+        }))
+      } else {
+        this.setState(() => ({
+          shelfMessage: '',
+        }))
+      }
+    }
+  }
 
   render() {
     const {
@@ -24,6 +41,7 @@ class BookShelf extends Component {
       <div className="bookshelf">
         <h2 className="bookshelf-title">{shelfLabel}</h2>
         <div className="bookshelf-books">
+          <p>{this.state.shelfMessage}</p>
           <ol className="books-grid">
 
             {/* Loop through all the available books in this shelf */}
@@ -44,5 +62,12 @@ class BookShelf extends Component {
     )
   }
 }
+
+BookShelf.propTypes = {
+  booksToDisplay: PropTypes.array.isRequired, //The books for the specific shelf
+  shelfLabel: PropTypes.string.isRequired, //Shelf Label
+  updatePersonalBooks: PropTypes.func.isRequired, //UI update
+  createNotification: PropTypes.func.isRequired, //Notification system
+};
 
 export default BookShelf;

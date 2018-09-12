@@ -1,12 +1,10 @@
 import React from 'react';
 import './App.css';
 import {Route, Link} from "react-router-dom";
-import SearchBar from "./components/SearchBar";
 import Library from './components/Library';
+import SearchBar from "./components/SearchBar";
 import {getAll} from "./BooksAPI";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-
-//TODO: add proptypes https://reactjs.org/docs/typechecking-with-proptypes.html
 
 class BooksApp extends React.Component {
 
@@ -16,35 +14,38 @@ class BooksApp extends React.Component {
     personalBooks: [],
   };
 
-  //Handle the notifications app-wide
-  createNotification = (type, message, title='', timeout = 5000, cb = null) => {
-      switch (type) {
-        case 'success':
-          NotificationManager.success(message, title, timeout, cb);
-          break;
-        case 'warning':
-          NotificationManager.warning(message, title, timeout, cb);
-          break;
-        case 'error':
-          NotificationManager.error(message, title, timeout, cb);
-          break;
-        case 'info':
-        default:
-          NotificationManager.info(message, title, timeout, cb);
-          break;
-      }
+  //Handle the notifications app-wide with
+  // https://www.npmjs.com/package/react-notifications
+  //Type = String ['success'|'warning'|'error'|'info'] - required
+  //message = String - required
+  //title = String - optional
+  //timeout = Int - optional
+  //cb = func - optional
+  createNotification = (type, message, title = '', timeout = 5000, cb = null) => {
+    switch (type) {
+      case 'success':
+        NotificationManager.success(message, title, timeout, cb);
+        break;
+      case 'warning':
+        NotificationManager.warning(message, title, timeout, cb);
+        break;
+      case 'error':
+        NotificationManager.error(message, title, timeout, cb);
+        break;
+      case 'info':
+      default:
+        NotificationManager.info(message, title, timeout, cb);
+        break;
+    }
   };
 
-  //Handle the fetch of the personal Library. This can be performed at 1st
-  //render and anytime the child components get mounted again (view switch)
+  //Handle the fetch of the personal Library
   fetchPersonalLibrary = (() => {
-    //Assure that the state is not already populated
-    this.state.personalBooks.length === 0 &&
     //Get all the books for populate the shelves
     getAll()
       .then(
         res => {
-          //Update the state and force re-rendering, as shelf until now were
+          //Update the state and force re-rendering, as shelves until now were
           //empty and can be populated now
           this.setState(() => ({
             personalBooks: res,
@@ -63,6 +64,7 @@ class BooksApp extends React.Component {
   }
 
   //Update the state when the books change
+  //newBooks is a completely new collection, that has to be created by the child
   updatePersonalBooks = (newBooks) => {
     this.setState(({personalBooks: newBooks}));
   };
@@ -76,7 +78,6 @@ class BooksApp extends React.Component {
           <SearchBar
             personalBooks={this.state.personalBooks}
             updatePersonalBooks={this.updatePersonalBooks}
-            fetchPersonalLibrary={this.fetchPersonalLibrary}
             createNotification={this.createNotification}
           />
         )}
@@ -93,7 +94,6 @@ class BooksApp extends React.Component {
             <Library
               personalBooks={this.state.personalBooks}
               updatePersonalBooks={this.updatePersonalBooks}
-              fetchPersonalLibrary={this.fetchPersonalLibrary}
               createNotification={this.createNotification}
             />
 
@@ -104,6 +104,7 @@ class BooksApp extends React.Component {
           </div>
         )}/>
 
+        {/* Notification flash messages */}
         <NotificationContainer/>
       </div>
     )
