@@ -2,6 +2,10 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import BookShelf from './BookShelf';
 
+/**
+ * This Component handle the personal library view.
+ * Its mainly duty is to define the shelves to display.
+ */
 class Library extends Component {
 
   state = {

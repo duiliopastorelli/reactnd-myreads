@@ -8,8 +8,6 @@ import BookItem from "./BookItem";
 
 /**
  * This Component handle the search view UI
- * See propTypes at the bottom for more info on props needed
- *
  */
 class SearchBar extends Component {
 

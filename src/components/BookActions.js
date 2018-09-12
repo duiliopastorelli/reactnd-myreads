@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import {update} from "../BooksAPI";
 import 'react-notifications/lib/notifications.css';
 
+/**
+ * This Component handle the actions button on each book.
+ */
 class BookActions extends Component {
 
   /**

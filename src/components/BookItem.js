@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import BookActions from './BookActions';
 
+/**
+ * This component handle the single book to be displayed on a shelf.
+ */
 class BookItem extends Component {
 
   render() {
