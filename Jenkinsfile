@@ -6,7 +6,7 @@ pipeline {
         }
     }
     stages {
-        stage('Build') {
+        stage('Environment setup') {
             steps {
                 sh 'npm install'
             }
@@ -15,6 +15,11 @@ pipeline {
             steps {
                 sh 'npm start &'
                 input message: 'Check the site on :3000 (Click "Proceed" to continue)'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'npm build'
             }
         }
     }
