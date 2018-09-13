@@ -13,13 +13,6 @@ pipeline {
                 sh 'set +x'
             }
         }
-        stage('Test') {
-            steps {
-                sh 'set -x'
-                sh 'npm test'
-                sh 'set +x'
-            }
-        }
         stage('Run dev env') {
             steps {
                 sh 'set -x'
