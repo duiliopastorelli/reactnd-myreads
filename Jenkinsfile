@@ -14,11 +14,11 @@ pipeline {
         stage('Run dev env') {
             steps {
                 sh 'npm start'
-                input{
-                    message "Press Ok to continue"
-                    parameters {
-                        string(name:'username', defaultValue: 'user', description: 'Username of the user pressing Ok')
-                    }
+            }
+            input{
+                message "Press Ok to continue"
+                parameters {
+                    string(name:'username', defaultValue: 'user', description: 'Username of the user pressing Ok')
                 }
             }
         }
