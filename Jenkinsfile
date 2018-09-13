@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Run dev env') {
             steps {
-                sh 'npm start'
+                sh 'npm start &'
             }
             input{
                 message "Press Ok to continue"
