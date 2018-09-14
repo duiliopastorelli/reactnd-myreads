@@ -14,8 +14,7 @@ pipeline {
         stage('Run dev env') {
             steps {
                 sh 'npm start &'
-                input message: 'Check the site on :3010 (Click "Proceed" to
-                continue)'
+                input message: 'Check the site on :3010 (Click "Proceed" to continue)'
             }
         }
         stage('Build') {
