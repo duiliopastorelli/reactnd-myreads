@@ -16,12 +16,5 @@ pipeline {
                 sh 'npm run-script build'
             }
         }
-        stage('Run') {
-            steps {
-                sh 'serve -s build &'
-                sh 'echo INFO: Accepting connections at http://localhost:3001'
-                input message: 'Finished using the web site? (Click "Proceed" to continue)'
-            }
-        }
     }
 }
