@@ -20,6 +20,7 @@ pipeline {
         stage('Run') {
             steps {
                 sh 'serve -s build'
+                input message: 'Finished using the web site? (Click "Proceed" to continue)'
             }
         }
     }
