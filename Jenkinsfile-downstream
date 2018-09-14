@@ -9,11 +9,7 @@ pipeline {
         stage('Environment setup') {
             steps {
                 sh 'npm install'
-            }
-        }
-        stage('Build') {
-            steps {
-                sh 'npm run-script build'
+                sh 'npm install -g serve'
             }
         }
         stage('Run') {
